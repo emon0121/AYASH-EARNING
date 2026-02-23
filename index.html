@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AYASH EARNING</title>
+
+<!-- Telegram WebApp -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body{
+margin:0;
+font-family: Arial, sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.header{
+text-align:center;
+padding:20px;
+}
+
+.header h1{
+margin:0;
+color:#22c55e;
+}
+
+.container{
+padding:15px;
+}
+
+.card{
+background:#1e293b;
+padding:18px;
+border-radius:14px;
+margin-bottom:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+.balance{
+font-size:28px;
+font-weight:bold;
+color:#22c55e;
+}
+
+.menu{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:10px;
+}
+
+.btn{
+background:#3b82f6;
+padding:14px;
+border-radius:10px;
+text-align:center;
+font-weight:bold;
+cursor:pointer;
+}
+
+.btn:active{
+transform:scale(0.96);
+}
+
+.footer{
+text-align:center;
+font-size:13px;
+opacity:0.6;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>AYASH EARNING</h1>
+<p>Earn Daily • Refer & Earn • Withdraw Anytime</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+<div>Current Balance</div>
+<div class="balance" id="balance">৳0.00</div>
+</div>
+
+<div class="card">
+<div class="menu">
+
+<div class="btn" onclick="showMessage('Tasks page coming soon')">
+📋 Tasks
+</div>
+
+<div class="btn" onclick="showMessage('Referral system coming soon')">
+👥 Refer
+</div>
+
+<div class="btn" onclick="showMessage('Wallet page coming soon')">
+💰 Wallet
+</div>
+
+<div class="btn" onclick="showMessage('Withdrawal system coming soon')">
+🏧 Withdraw
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h3>Welcome 👋</h3>
+<p id="user">Loading user...</p>
+</div>
+
+<div class="footer">
+AYASH EARNING © 2026
+</div>
+
+</div>
+
+<script>
+// Telegram WebApp Ready
+let tg = window.Telegram.WebApp;
+tg.expand();
+
+// Get Telegram user info
+const user = tg.initDataUnsafe?.user;
+
+if(user){
+document.getElementById("user").innerHTML =
+"Hello, <b>" + user.first_name + "</b>";
+}
+
+// demo message
+function showMessage(msg){
+alert(msg);
+}
+
+// demo balance
+document.getElementById("balance").innerText = "৳10.00";
+</script>
+
+</body>
+</html>
