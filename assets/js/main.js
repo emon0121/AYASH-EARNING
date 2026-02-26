@@ -5,51 +5,55 @@ import {
   setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Telegram Mini App Init
 const tg = window.Telegram.WebApp;
+
+tg.ready();
 tg.expand();
 
-// Telegram User Data
-const user = tg.initDataUnsafe?.user;
+function startApp() {
 
-if (!user) {
-  console.log("Telegram user not found ❌");
-} else {
+  const user = tg.initDataUnsafe?.user;
 
-  console.log("Telegram User:", user);
+  if (!user) {
+    document.getElementById("user").innerText =
+      "Please open from Telegram Bot";
+    return;
+  }
+
+  document.getElementById("user").innerHTML =
+    "Hello, <b>" + user.first_name + "</b>";
 
   const userRef = doc(db, "users", user.id.toString());
 
-  async function registerUser() {
-    try {
+  getDoc(userRef).then(async (docSnap) => {
 
-      const docSnap = await getDoc(userRef);
+    if (!docSnap.exists()) {
 
-      if (!docSnap.exists()) {
+      await setDoc(userRef, {
+        userId: user.id.toString(),
+        name: user.first_name,
+        username: user.username || "",
+        balance: 10,
+        plan: "Free",
+        createdAt: new Date()
+      });
 
-        await setDoc(userRef, {
-          userId: user.id.toString(),
-          name: user.first_name || "",
-          username: user.username || "",
-          balance: 0,
-          plan: "Free",
-          referrals: 0,
-          todayEarning: 0,
-          totalEarning: 0,
-          isBlocked: false,
-          createdAt: new Date()
-        });
+      document.getElementById("balance").innerText = "৳10.00";
 
-        console.log("✅ New User Created");
+      console.log("✅ New User Created");
 
-      } else {
-        console.log("✅ User Already Exists");
-      }
+    } else {
 
-    } catch (error) {
-      console.error("Firebase Error:", error);
+      const data = docSnap.data();
+
+      document.getElementById("balance").innerText =
+        "৳" + data.balance + ".00";
+
+      console.log("✅ User Loaded");
     }
-  }
 
-  registerUser();
+  });
+
 }
+
+setTimeout(startApp, 1000);
