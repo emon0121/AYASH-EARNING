@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - AYASH EARNING</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+<div class="bg-white/5 p-6 rounded-xl w-80">
+  <h2 class="text-xl font-bold mb-4 text-center">একাউন্ট তৈরি করুন</h2>
+  <input id="email" type="email" placeholder="ইমেইল" class="w-full mb-2 p-2 text-black rounded">
+  <input id="password" type="password" placeholder="পাসওয়ার্ড" class="w-full mb-4 p-2 text-black rounded">
+  <button onclick="register()" class="w-full bg-indigo-600 py-2 rounded">রেজিস্টার</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBMKXazwuAHs4oujjZ75OFdP211nX45JU8",
+  authDomain: "ayash-earning.firebaseapp.com",
+  projectId: "ayash-earning",
+  storageBucket: "ayash-earning.firebasestorage.app",
+  messagingSenderId: "352126412047",
+  appId: "1:352126412047:web:acb56ca67779de0baf8a7a"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.register = function () {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
+
+  createUserWithEmailAndPassword(auth, email, pass)
+    .then(() => {
+      alert("রেজিস্ট্রেশন সফল!");
+      window.location.href = "dashboard.html";
+    })
+    .catch(err => alert(err.message));
+}
+</script>
+
+</body>
+</html>
