@@ -8,41 +8,39 @@ import {
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// ✅ Telegram Ready হওয়া পর্যন্ত wait
-Telegram.WebApp.ready();
+const user = tg.initDataUnsafe?.user;
 
-setTimeout(async () => {
-
-  const user = tg.initDataUnsafe?.user;
-
-  if (!user) {
-    console.log("Telegram user not found");
-    return;
-  }
-
-  // UI Name Show
-  document.getElementById("user").innerHTML =
-    "Hello, <b>" + user.first_name + "</b>";
+if (!user) {
+  document.getElementById("user").innerText =
+    "Telegram user not detected";
+} else {
 
   const userRef = doc(db, "users", user.id.toString());
 
-  const docSnap = await getDoc(userRef);
+  getDoc(userRef).then(async (snap) => {
 
-  if (!docSnap.exists()) {
+    // ✅ User create if not exists
+    if (!snap.exists()) {
 
-    await setDoc(userRef, {
-      userId: user.id.toString(),
-      name: user.first_name,
-      username: user.username || "",
-      balance: 0,
-      plan: "Free",
-      createdAt: new Date()
-    });
+      await setDoc(userRef, {
+        userId: user.id.toString(),
+        name: user.first_name,
+        username: user.username || "",
+        balance: 0,
+        plan: "Free",
+        createdAt: new Date()
+      });
 
-    console.log("User Registered");
+      document.getElementById("balance").innerText = "৳0.00";
+    }
 
-  } else {
-    console.log("User Already Exists");
-  }
+    // ✅ Load user data
+    const data = (await getDoc(userRef)).data();
 
-}, 1000);
+    document.getElementById("user").innerHTML =
+      `Hello, <b>${data.name}</b>`;
+
+    document.getElementById("balance").innerText =
+      `৳${data.balance.toFixed(2)}`;
+  });
+}
